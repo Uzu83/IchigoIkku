@@ -7,31 +7,34 @@
 //
 
 import SwiftUI
+import SwiftData
 
 
-struct HaikuCell: View {
-    var haiku: String = "かきくへば\nかねがなるなり\nほうりゅうじ"
+
+struct HaikuCard: View {
+    var haikutext: String
+    var size: CGFloat
     
     var body: some View {
         ZStack{
             Rectangle()//俳句のカードの背景
                 .aspectRatio(1 / sqrt(2), contentMode: .fit)
-                .frame(width: 350 ,alignment: .center)
+                .frame(width: size,alignment: .center)
                 .foregroundColor(.red.opacity(0.03)) // 背景色を指定
-                .cornerRadius(20) // 角丸にする
-                .border(.green, width: 2) // 枠線をつける
-                .padding(10)
-                .shadow(radius: 5) // 影をつける
+                .cornerRadius(size * 0.057) // 角丸にする
+                .border(.green, width: size * 0.0057) // 枠線をつける
+                .padding(size * 0.029)
+                .shadow(radius: size * 0.014) // 影をつける
                 
             
             //Set it to the center of the screen
             
-            HStack(alignment: .top, spacing: 49) {
-                ForEach(haiku.split(separator: "\n").reversed(), id: \.self) { line in
-                    VStack(spacing: 10) {
+            HStack(alignment: .top, spacing: size * 0.14) {
+                ForEach(haikutext.split(separator: "\n").reversed(), id: \.self) { line in
+                    VStack(spacing: size * 0.029) {
                         ForEach(Array(line), id: \.self) { char in
                             Text(String(char))
-                                .font(.system(size: 40, weight: .regular, design: .serif))
+                                .font(.system(size: size * 0.114, weight: .regular, design: .serif))
                                 
                         }
                     }
@@ -50,5 +53,5 @@ struct HaikuCell: View {
 
 
 #Preview {
-    HaikuCell()
+    HaikuCard(haikutext:"かきくへば\nしるもしらぬも\nあじさいい", size: 350)
 }

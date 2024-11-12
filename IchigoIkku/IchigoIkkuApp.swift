@@ -12,7 +12,8 @@ import SwiftUI
 struct IchigoIkkuApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HaikuCreationView()
         }
+        .modelContainer(for: Haiku.self) // ここが重要！
     }
 }
