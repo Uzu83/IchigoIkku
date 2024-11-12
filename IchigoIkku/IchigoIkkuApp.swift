@@ -14,6 +14,6 @@ struct IchigoIkkuApp: App {
         WindowGroup {
             HaikuCreationView()
         }
-        .modelContainer(for: Haiku.self) // ここが重要！
+        .modelContainer(for: ComposedHaiku.self) // ここが重要！
     }
 }

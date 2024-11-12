@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1BD102352CE348F5008BF55E /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD102342CE348F5008BF55E /* GoogleGenerativeAI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		1B1FF0F92CDF483300DB9B29 /* IchigoIkku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IchigoIkku.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BD102352CE348F5008BF55E /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = IchigoIkku;
 			packageProductDependencies = (
+				1BD102342CE348F5008BF55E /* GoogleGenerativeAI */,
 			);
 			productName = IchigoIkku;
 			productReference = 1B1FF0F92CDF483300DB9B29 /* IchigoIkku.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 1B1FF0F02CDF483300DB9B29;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1BD102332CE348F5008BF55E /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1B1FF0FA2CDF483300DB9B29 /* Products */;
 			projectDirPath = "";
@@ -339,6 +348,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1BD102332CE348F5008BF55E /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1BD102342CE348F5008BF55E /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BD102332CE348F5008BF55E /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1B1FF0F12CDF483300DB9B29 /* Project object */;
 }

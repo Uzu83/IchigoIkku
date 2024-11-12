@@ -8,18 +8,24 @@
 
 import SwiftUI
 import SwiftData
+import GoogleGenerativeAI
 
 
 
 struct HaikuCreationView: View {
-    @Environment(\.modelContext) private var modelContext
+    let model = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: "YOUR_API_KEY")
+    @Environment(\.modelContext) private var context
+    @Query private var haikus: [ComposedHaiku]
     @State private var inputText = ""
     @State private var haikuText = "かきくへば\nかねがなるなり\nほうりゅうじ" //
-    @State var isHaikuFinalized = false
     
     var body: some View {
         NavigationView {
             VStack{
+                if let latestHaiku = haikus.last {
+                    Text(latestHaiku.text)
+                }else{
+                }
                 Image("SakuraPic")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -40,50 +46,46 @@ struct HaikuCreationView: View {
                      }
                      }*/
                         .padding(.bottom)
-                    VStack {
-                        Button(action: {
-                            submitHaiku()
-                        }){
-                            Text("詠む")
+                    
+                    Button(action: {
+                        submitHaiku()
+                        print("button pushed")
+                    }){
+                        Text("詠む")
                                 .padding(.horizontal)
                                 .padding(.vertical, 8)
                                 .background(Color.orange)
                                 .foregroundColor(.white)
                                 .cornerRadius(8)
-                        }
                         
-                        Button(action: {
-                            sendHaikuToAI()
-                        }) {
-                            NavigationLink(destination: HaikuAnalysisView()) {
-                                Text("評価")
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 8)
-                                    .background(Color.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                            }
-                        }
                     }
-                    
+                    NavigationLink{
+                        HaikuAnalysisView()
+                    } label: {
+                        Text("評価画面へ")
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                            .opacity(0.7)
+                    }
                 }
             }
-        }
-    }
-    func sendHaikuToAI(){
-        let newHaiku = Haiku(text: haikuText)
-        modelContext.insert(newHaiku)
-        do {
-            try modelContext.save()
-        } catch {
-            print("Error saving context: \(error)")
-        }
+        }.navigationBarBackButtonHidden(true)
     }
     
     func submitHaiku(){
         let formattedHaiku = formatHaiku(inputText)
         haikuText = formattedHaiku
         inputText = ""
+        context.insert(ComposedHaiku(text: formattedHaiku))
+        do {
+            try context.save()
+            print("Haiku saved")
+        }catch {
+            print("Error saving haiku")
+        }
     }
     
     func formatHaiku(_ text: String) -> String{

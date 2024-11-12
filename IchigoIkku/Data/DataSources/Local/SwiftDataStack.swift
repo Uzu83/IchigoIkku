@@ -6,11 +6,11 @@
 //  
 //
 
-import Foundation
+import SwiftUI
 import SwiftData
 
 @Model
-class  Haiku{
+class  ComposedHaiku{
     var text: String
        
        init(text: String) {
