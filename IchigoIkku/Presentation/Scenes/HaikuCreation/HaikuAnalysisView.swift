@@ -10,19 +10,15 @@ import SwiftUI
 import SwiftData
 
 struct HaikuAnalysisView: View {
-    @Query var haikus: [ComposedHaiku]
+    @Binding var composeHaiku:String
     
     var body: some View {
-        NavigationView{
+        NavigationStack {
             VStack {
-                if !haikus.isEmpty {
-                    
-                    List(haikus){haiku in
-                        HaikuCard(haikutext:haiku.text,size: 100)
-                    }}else{
-                        Text("俳句を提出してください")
-                    }
+                HaikuCard(haikutext:composeHaiku, size: 200)
+                Spacer()
                 YourMessageView()
+                Spacer()
                 HStack{
                     Button(action: {
                         // ここで何かしらの処理を行う
@@ -45,8 +41,8 @@ struct HaikuAnalysisView: View {
                             .background(Color.green)
                             .foregroundColor(.white)
                             .cornerRadius(8)
-                       
-                            
+                        
+                        
                     }
                 }
             }
@@ -56,5 +52,5 @@ struct HaikuAnalysisView: View {
 }
 
 #Preview {
-    HaikuAnalysisView()
+    HaikuAnalysisView(composeHaiku: .constant("かきくへば\nしるもしらぬも\nあじさいい"))
 }

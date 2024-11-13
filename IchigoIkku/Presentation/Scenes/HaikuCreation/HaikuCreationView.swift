@@ -14,24 +14,18 @@ import GoogleGenerativeAI
 
 struct HaikuCreationView: View {
     let model = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: "YOUR_API_KEY")
-    @Environment(\.modelContext) private var context
-    @Query private var haikus: [ComposedHaiku]
     @State private var inputText = ""
-    @State private var haikuText = "かきくへば\nかねがなるなり\nほうりゅうじ" //
+    @State var composedHaiku = "かきくへば\nかねがなるなり\nほうりゅうじ" //
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack{
-                if let latestHaiku = haikus.last {
-                    Text(latestHaiku.text)
-                }else{
-                }
                 Image("SakuraPic")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 450) // サイズを指定
                 
-                HaikuCard(haikutext: haikuText,size: 150)
+                HaikuCard(haikutext: composedHaiku,size: 150)
                     .padding(.bottom, 60)
                 HStack {
                     TextField("全角スペースで分けてください", text: $inputText)
@@ -52,40 +46,34 @@ struct HaikuCreationView: View {
                         print("button pushed")
                     }){
                         Text("詠む")
-                                .padding(.horizontal)
-                                .padding(.vertical, 8)
-                                .background(Color.orange)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background(Color.orange)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                         
                     }
                     NavigationLink{
-                        HaikuAnalysisView()
+                        HaikuAnalysisView(composeHaiku: $composedHaiku)
                     } label: {
-                        Text("評価画面へ")
-                            .padding(.horizontal)
+                        Text("評価する")
+                            .padding(.horizontal,8)
                             .padding(.vertical, 8)
                             .background(Color.green)
                             .foregroundColor(.white)
                             .cornerRadius(8)
-                            .opacity(0.7)
                     }
+                    
                 }
-            }
-        }.navigationBarBackButtonHidden(true)
+            }.navigationBarBackButtonHidden(true)
+        }
     }
     
     func submitHaiku(){
         let formattedHaiku = formatHaiku(inputText)
-        haikuText = formattedHaiku
+        composedHaiku = formattedHaiku
         inputText = ""
-        context.insert(ComposedHaiku(text: formattedHaiku))
-        do {
-            try context.save()
-            print("Haiku saved")
-        }catch {
-            print("Error saving haiku")
-        }
+        
     }
     
     func formatHaiku(_ text: String) -> String{
@@ -96,8 +84,8 @@ struct HaikuCreationView: View {
         return formattedHaiku
     }
     
+    
 }
-
 
 #Preview {
     HaikuCreationView()
