@@ -12,10 +12,9 @@ import SwiftData
 @Model
 class  ComposedHaiku{
     var text: String
-    var createdAt: Date
+    var createdAt: Date = Date()
     
     init(text: String) {
         self.text = text
-        self.createdAt = Date()
     }
 }

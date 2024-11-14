@@ -13,6 +13,13 @@ import GoogleGenerativeAI
 struct HaikuAnalysisView: View {
     @Binding var composedHaiku:String
     @Environment(\.modelContext) private var context
+    @State private var response = "分析中です。しばらくお待ちください。"
+    
+    let model = GenerativeModel(
+        name:"gemini-1.5-flash-8b",
+        apiKey:APIKey.default
+    )
+    
     
     
     var body: some View {
@@ -20,7 +27,7 @@ struct HaikuAnalysisView: View {
             VStack {
                 HaikuCard(haikutext:composedHaiku, size: 200)
                 Spacer()
-                YourMessageView()
+                YourMessageView(message: response)
                 Spacer()
                 HStack{
                     Button(action: {
@@ -36,14 +43,14 @@ struct HaikuAnalysisView: View {
                                 .cornerRadius(8)
                         }}
                     Button(action: {
-                        saveHaiku()
                         do{try deleteHaiku(context: context, limit: 10, sortKeyPath: \ComposedHaiku.createdAt)
                         }catch{
                             print("Error deleting haiku")
                         }
-                        analyzeHaiku()
                     }) {
-                        Text("俳句提出")
+                        NavigationLink{ HaikuCreationView()
+                    }label:{
+                        Text("保存する")
                             .padding(.horizontal)
                             .padding(.vertical, 8)
                             .background(Color.green)
@@ -52,21 +59,23 @@ struct HaikuAnalysisView: View {
                         
                         
                     }
+                    }
                 }
             }
             
         }.navigationBarBackButtonHidden(true)
+            /*.onAppear{
+                Task{
+                    await analyzeHaiku()
+
+                }
+            }*/
     }
     
     private func saveHaiku() {
         //まずはSwiftDataに永続的に保存する
         let data = composedHaiku
         context.insert(ComposedHaiku(text: data))
-        do{
-            try context.save()
-        }catch{
-            print("Error saving haiku")
-        }
     }
     
     private func deleteHaiku<T: ComposedHaiku>(
@@ -101,9 +110,19 @@ struct HaikuAnalysisView: View {
             
         }
     }
-    private func analyzeHaiku(){
+    private func analyzeHaiku() async{
+        let initialPrompt = InitialPrompt.content
+        let prompt = initialPrompt + composedHaiku
+        do{
+            let generatedResponse = try await model.generateContent(prompt)
+            response = generatedResponse.text ?? "分析結果を取得できませんでした。"
+        }catch{
+            response = "分析に失敗しました。"
+        }
     }
 }
+
+
 
 #Preview {
     HaikuAnalysisView(composedHaiku: .constant("かきくへば\nしるもしらぬも\nあじさいい"))

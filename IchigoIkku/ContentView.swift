@@ -10,13 +10,15 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView{
+            Tab("句集", systemImage: "square.on.square"){
+                HaikuListView()
+            }
+            Tab("作成", systemImage: "plus"){
+                HaikuCreationView()
+            }
         }
-        .padding()
+        
     }
 }
 

@@ -10,6 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct YourMessageView: View {
+    var message: String
     var body: some View {
         HStack{
             Image(systemName: "person")
@@ -17,7 +18,7 @@ struct YourMessageView: View {
                 .aspectRatio(1, contentMode: .fit)
                 .frame(width:60)
             ZStack{
-                Text("Your Haiku is Wonderful!!\nAmazing")
+                Text(message)
                     .font(.system(size: 25, weight: .regular, design: .serif))
                     .padding()
                     .background(Color.green.opacity(0.7))
@@ -36,5 +37,5 @@ struct YourMessageView: View {
     }
  */
 #Preview {
-    YourMessageView()
+    YourMessageView(message: "Your Haiku is Wonderful!!\nAmazing")
 }

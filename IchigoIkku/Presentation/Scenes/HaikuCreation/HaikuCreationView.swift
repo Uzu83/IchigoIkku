@@ -10,7 +10,7 @@ import SwiftUI
 
 struct HaikuCreationView: View {
     @State private var inputText = ""
-    @State var composedHaiku = "かきくへば\nかねがなるなり\nほうりゅうじ" //
+    @State var composedHaiku = "柿食えば\n鐘が鳴るなり\n法隆寺" //
     
     var body: some View {
         NavigationStack {
