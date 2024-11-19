@@ -10,11 +10,14 @@ import SwiftUI
 import SwiftData
 
 @Model
-class  ComposedHaiku{
+final class  ComposedHaiku{
     var text: String
-    var createdAt: Date = Date()
+    var createdAt: Date
     
     init(text: String) {
         self.text = text
+        self.createdAt = Date()
     }
+    
+    
 }

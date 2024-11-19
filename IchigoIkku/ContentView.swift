@@ -3,7 +3,7 @@
 //  IchigoIkku
 //
 //  Created by Uzu83 on 2024/11/09
-//  
+//
 //
 
 import SwiftUI
@@ -11,16 +11,20 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView{
-            Tab("句集", systemImage: "square.on.square"){
-                HaikuListView()
-            }
-            Tab("作成", systemImage: "plus"){
-                HaikuCreationView()
-            }
+            HaikuCreationView()
+                .tabItem {
+                Label("詠む", systemImage: "pencil")
+                }
+            HaikuListView()
+                .tabItem {
+                    Label("句集", systemImage: "list.bullet")
+                }
+            
         }
-        
     }
 }
+
+
 
 #Preview {
     ContentView()

@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct HaikuListView: View {
-    @Query var haikus: [ComposedHaiku]
+    @Query var haikus :[ComposedHaiku]
     
     var body: some View {
         List(haikus){ haiku in

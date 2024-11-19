@@ -11,6 +11,7 @@ import SwiftUI
 struct HaikuCreationView: View {
     @State private var inputText = ""
     @State var composedHaiku = "柿食えば\n鐘が鳴るなり\n法隆寺" //
+    @State private var isActive = false
     
     var body: some View {
         NavigationStack {
@@ -38,6 +39,9 @@ struct HaikuCreationView: View {
                         .padding(20)
                     
                     Button(action: {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            isActive = true
+                        }
                         submitHaiku()
                         print("button pushed")
                     }){

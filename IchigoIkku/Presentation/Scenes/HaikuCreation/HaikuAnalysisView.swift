@@ -11,6 +11,7 @@ import SwiftData
 import GoogleGenerativeAI
 
 struct HaikuAnalysisView: View {
+    @State private var isActive = false
     @Binding var composedHaiku:String
     @Environment(\.modelContext) private var context
     @State private var response = "分析中です。しばらくお待ちください。"
@@ -19,6 +20,7 @@ struct HaikuAnalysisView: View {
         name:"gemini-1.5-flash-8b",
         apiKey:APIKey.default
     )
+    let haikuManager = HaikuManager()
     
     
     
@@ -43,10 +45,9 @@ struct HaikuAnalysisView: View {
                                 .cornerRadius(8)
                         }}
                     Button(action: {
-                        do{try deleteHaiku(context: context, limit: 10, sortKeyPath: \ComposedHaiku.createdAt)
-                        }catch{
-                            print("Error deleting haiku")
-                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            isActive = true}
+                        Task{await saveHaiku()}
                     }) {
                         NavigationLink{ HaikuCreationView()
                     }label:{
@@ -64,18 +65,20 @@ struct HaikuAnalysisView: View {
             }
             
         }.navigationBarBackButtonHidden(true)
-            /*.onAppear{
+            .onAppear{
                 Task{
                     await analyzeHaiku()
 
                 }
-            }*/
+            }
     }
     
-    private func saveHaiku() {
+    
+    private func saveHaiku() async {
         //まずはSwiftDataに永続的に保存する
         let data = composedHaiku
         context.insert(ComposedHaiku(text: data))
+        try? await context.save()
     }
     
     private func deleteHaiku<T: ComposedHaiku>(
@@ -93,7 +96,7 @@ struct HaikuAnalysisView: View {
             
             // 4. 日付でソートしたFetchDescriptorを作成
             var descriptor = FetchDescriptor<T>(
-                sortBy: [SortDescriptor(sortKeyPath, order: .forward)]
+                sortBy: [SortDescriptor(sortKeyPath, order: .reverse)]
             )
             descriptor.fetchLimit = deleteCount
             
